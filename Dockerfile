@@ -26,6 +26,7 @@ ENV \
     S3PROXY_CREDENTIAL="local-credential" \
     S3PROXY_CORS_ALLOW_ALL="false" \
     S3PROXY_IGNORE_UNKNOWN_HEADERS="false" \
+    S3PROXY_PORT="80"\
     JCLOUDS_PROVIDER="filesystem" \
     JCLOUDS_ENDPOINT="" \
     JCLOUDS_REGION="" \
