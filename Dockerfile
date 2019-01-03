@@ -1,5 +1,5 @@
 # Multistage - Builder
-FROM maven:3.5.0-jdk-7-alpine as s3proxy-builder
+FROM maven:3.5.0-jdk-7-alpine
 LABEL maintainer="Andrew Gaul <andrew@gaul.org>"
 
 WORKDIR /opt/s3proxy
@@ -7,14 +7,8 @@ COPY . /opt/s3proxy/
 
 RUN mvn package -DskipTests
 
-# Multistage - Image
-FROM openjdk:7-jre-alpine
-LABEL maintainer="Andrew Gaul <andrew@gaul.org>"
-
-WORKDIR /opt/s3proxy
 
 COPY \
-    --from=s3proxy-builder \
     /opt/s3proxy/target/s3proxy \
     /opt/s3proxy/src/main/resources/run-docker-container.sh \
     /opt/s3proxy/
@@ -26,7 +20,7 @@ ENV \
     S3PROXY_CREDENTIAL="local-credential" \
     S3PROXY_CORS_ALLOW_ALL="false" \
     S3PROXY_IGNORE_UNKNOWN_HEADERS="false" \
-    S3PROXY_PORT="80"\
+    S3PROXY_PORT="8080"\
     JCLOUDS_PROVIDER="filesystem" \
     JCLOUDS_ENDPOINT="" \
     JCLOUDS_REGION="" \
@@ -37,7 +31,7 @@ ENV \
     JCLOUDS_KEYSTONE_SCOPE="" \
     JCLOUDS_KEYSTONE_PROJECT_DOMAIN_NAME=""
 
-EXPOSE 80
+EXPOSE 8080
 VOLUME /data
 
 ENTRYPOINT ["/opt/s3proxy/run-docker-container.sh"]
